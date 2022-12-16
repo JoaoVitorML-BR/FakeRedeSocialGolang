@@ -18,6 +18,8 @@ func openMainMenu(){
 
 		fmt.Printf("Fazer cadastro - 1 \n")
 		fmt.Printf("Fazer Login - 2 \n")
+		fmt.Println("Mostar Posts - 3: ")
+		fmt.Println("Mostar E-mails - 4: ")
 		fmt.Printf("Sair - 0 \n")
 		fmt.Println("Digite a opção desejada: ")
 
@@ -26,6 +28,17 @@ func openMainMenu(){
 
 		if(op == 1){
 			RegisterLister()
+			continue
+		}else if (op == 2) {
+			findUserRegister()
+			continue
+		}else if(op == 3){
+			readName()
+		}else if(op == 4){
+			readEmail()
+		}else if(op == 0){
+			fmt.Println("Ok, obrigado.")
+			return
 		}
 
 	}
