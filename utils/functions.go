@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"fmt"
@@ -38,7 +38,7 @@ func RegisterLister() {
 	ListUsers = append(ListUsers, user)
 }
 
-func findUserRegister() {
+func FindUserRegister() {
 	var findUser string
 	var password string
 
@@ -117,6 +117,13 @@ func Postage() {
 
 }
 
+func readPosts() {
+	for i := range listposts {
+		fmt.Println("Titulo: " + listposts[i].GetTitle())
+		fmt.Println("Message: " + listposts[i].GetMessage())
+	}
+}
+
 func readName() {
 	for i := range ListUsers {
 		fmt.Println("Nome do usuário: " + ListUsers[i].Name())
@@ -126,12 +133,5 @@ func readName() {
 func readEmail() {
 	for i := range ListUsers {
 		fmt.Println("E-mail: " + ListUsers[i].Email())
-	}
-}
-
-func readPosts() {
-	for i := range listposts {
-		fmt.Println("Titulo: " + listposts[i].GetTitle())
-		fmt.Println("Message: " + listposts[i].GetMessage())
 	}
 }
