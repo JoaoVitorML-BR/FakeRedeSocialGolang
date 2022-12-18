@@ -1,7 +1,9 @@
 package main
 
-import "modulo/ui"
+import (
+	"modulo/ui"
+)
 
 func main() {
-	ui.openMainMenu()
+	ui.OpenMainMenu()
 }

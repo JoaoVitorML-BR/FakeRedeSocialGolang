@@ -2,10 +2,10 @@ package ui
 
 import (
 	"fmt"
-	. "modulo/utils"
+	."modulo/utils"
 )
 
-func openMainMenu() {
+func OpenMainMenu() {
 	for {
 		fmt.Println("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
 		fmt.Println("Bem Vindo(a)!")
@@ -15,7 +15,7 @@ func openMainMenu() {
 
 		fmt.Printf("Fazer cadastro - 1 \n")
 		fmt.Printf("Fazer Login - 2 \n")
-		fmt.Printf("Sair - 0 \n")
+		fmt.Printf("Sair - 3 \n")
 		fmt.Println("Digite a opção desejada: ")
 
 		var op int
@@ -27,9 +27,12 @@ func openMainMenu() {
 		} else if op == 2 {
 			FindUserRegister()
 			continue
-		} else if op == 0 {
+		} else if op == 3 {
 			fmt.Println("Ok, obrigado.")
 			return
+		}else{
+			fmt.Println("Opção invalida, tente novamente.")
+			continue
 		}
 
 	}
