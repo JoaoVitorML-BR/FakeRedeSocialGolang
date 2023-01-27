@@ -1,8 +1,8 @@
 package models
 
 type Post struct {
-	Title   string
-	Message string
+	Title   string `db:"title"`
+	Message string `db:"message"`
 }
 
 func (p Post) GetTitle() string {

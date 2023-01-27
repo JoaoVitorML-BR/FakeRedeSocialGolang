@@ -2,6 +2,8 @@ package utils
 
 import (
 	"fmt"
+	_ "github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 	"modulo/models"
 )
 
@@ -10,7 +12,7 @@ var listposts []models.Post
 
 func RegisterLister() {
 
-	user := models.Register{}
+	newUser := models.Register{}
 
 	var name string
 	var email string
@@ -20,44 +22,86 @@ func RegisterLister() {
 
 	fmt.Println("Nome: ")
 	fmt.Scan(&name)
-	user.SetName(name)
+	newUser.SetName(name)
 
 	fmt.Println("E-mail: ")
 	fmt.Scan(&email)
-	user.SetEmail(email)
+	newUser.SetEmail(email)
 
 	fmt.Println("Password: ")
 	fmt.Scan(&password)
+	newUser.SetPassword(password)
 
 	if name != "" && email != "" && password != "" {
+		register := models.Register{
+			Name:     name,
+			Email:    email,
+			Password: password,
+		}
+		ListUsers = append(ListUsers, register)
 		fmt.Println("Usuário registrado com sucesso!")
 	} else {
 		fmt.Println("Você precisa preencher todos os campos corretamente, por favor, digite 1 e tente novamente.")
 	}
 
-	ListUsers = append(ListUsers, user)
+	ListUsers = append(ListUsers, newUser)
+
+	conn, err := getConnection()
+	if err != nil {
+		panic(err)
+	}
+
+	defer conn.Close()
+
+	insert := `
+			insert into users (name, email, password)
+			values ($1, $2, $3)`
+
+	_, err = conn.Exec(insert, newUser.Name, newUser.Email, newUser.Password)
+	if err != nil {
+		panic(err)
+	} else {
+		fmt.Println("Usuário inserido")
+	}
 }
+
+var listusers []models.Register
 
 func FindUserRegister() {
 	var findUser string
 	var password string
 
-	if len(ListUsers) != 0 {
-		for i := range ListUsers {
-			fmt.Println("Faça seu Login:")
-			fmt.Println("")
-			fmt.Println("Digite seu e-mail: ")
-			fmt.Scan(&findUser)
-			fmt.Println("Digite sua senha: ")
-			fmt.Scan(&password)
-			if ListUsers[i].Email() == findUser {
-				Login()
-			} else {
-				fmt.Println("E-mail ou senha incorreto, tente novamente.")
-				continue
-			}
-		}
-	} else {
-		fmt.Println("Você precisa se cadastrar primeiro.")
+	conn, err := getConnection()
+	if err != nil {
+		panic(err)
 	}
+	defer conn.Close()
+
+	fmt.Println("Faça seu Login:")
+	fmt.Println("")
+	fmt.Println("Digite seu e-mail: ")
+	fmt.Scan(&findUser)
+	fmt.Println("Digite sua senha: ")
+	fmt.Scan(&password)
+
+	rows, err := conn.Query("SELECT email, password FROM users WHERE email=$1", findUser)
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+
+	var dbEmail string
+	var dbPassword string
+
+	for rows.Next() {
+		err := rows.Scan(&dbEmail, &dbPassword)
+		if err != nil {
+			panic(err)
+		}
+		if dbEmail == findUser && dbPassword == password {
+			Login()
+			return
+		}
+	}
+	fmt.Println("E-mail ou senha incorreto, tente novamente.")
 }

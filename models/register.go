@@ -1,31 +1,31 @@
 package models
 
 type Register struct {
-	email    string
-	name     string
-	password string
+	Email    string `db:"email"`
+	Name     string `db:"name"`
+	Password string `db:"passowrd"`
 }
 
-func (u Register) Name() string {
-	return u.name
+func (u Register) GetName() string {
+	return u.Name
 }
 
 func (u *Register) SetName(name string) {
-	u.name = name
+	u.Name = name
 }
 
-func (u Register) Email() string {
-	return u.email
+func (u Register) GetEmail() string {
+	return u.Email
 }
 
 func (u *Register) SetEmail(email string) {
-	u.email = email
+	u.Email = email
 }
 
-func (u Register) Password() string {
-	return u.password
+func (u Register) GetPassword() string {
+	return u.Password
 }
 
 func (u *Register) SetPassword(password string) {
-	u.password = password
+	u.Password = password
 }
